@@ -3,11 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Fireworks • Kanchana Ishodhara</title>
+  <title>Happy New Year 2026 • Kanchana Ishodhara</title>
+
   <style>
     :root { color-scheme: dark; }
     html, body { height: 100%; margin: 0; overflow: hidden; background:#050615; }
-    .fireworks {
+
+    .fireworks{
       position: fixed; inset: 0;
       background:
         radial-gradient(circle at 50% 40%, rgba(120,160,255,.20), transparent 55%),
@@ -15,49 +17,22 @@
         radial-gradient(circle at 80% 85%, rgba(120,255,210,.14), transparent 55%),
         #03040a;
     }
-    .credit{
-      position:fixed; left:0; right:0; bottom:10px;
-      text-align:center;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
-      font-size:12px; letter-spacing:.3px;
-      color:rgba(255,255,255,.85);
-      opacity:.78;
-      text-shadow:0 2px 12px rgba(0,0,0,.65);
-      pointer-events:none; user-select:none;
+
+    /* CENTER TEXT */
+    .centerText{
+      position: fixed; inset: 0;
+      display: grid; place-items: center;
+      text-align: center;
+      pointer-events: none;
       z-index: 5;
+      padding: 24px;
     }
-  </style>
-</head>
-<body>
-  <div class="fireworks"></div>
-  <div class="credit">Created by Kanchana Ishodhara</div>
 
-  <!-- Official CDN (jsDelivr) -->
-  <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.x/dist/index.umd.js"></script>
-
-  <script>
-    // Based on official docs: new Fireworks.default(container).start()
-    // :contentReference[oaicite:2]{index=2}
-    (function () {
-      var container = document.querySelector('.fireworks');
-
-      var options = {
-        autoresize: true,
-        opacity: 0.55,
-        acceleration: 1.05,
-        friction: 0.98,
-        gravity: 1.5,
-        particles: 90,
-        trace: 3,
-        explosion: 6,
-        hue: { min: 0, max: 360 },
-        delay: { min: 15, max: 32 },
-        mouse: { click: true, move: false, max: 3 }
-      };
-
-      var fw = new Fireworks.default(container, options);
-      fw.start();
-    })();
-  </script>
-</body>
-</html>
+    .headline{
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", sans-serif;
+      font-weight: 900;
+      letter-spacing: .5px;
+      line-height: 0.95;
+      text-transform: uppercase;
+      font-size: cla
