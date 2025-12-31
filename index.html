@@ -26,7 +26,13 @@
       text-align: center;
       pointer-events: none;
       z-index: 10;
-      padding: 24px;
+      padding: clamp(10px, 4vw, 28px);
+    }
+
+    /* Prevent too-wide layouts */
+    .content{
+      width: min(980px, 96vw);
+      margin: 0 auto;
     }
 
     .stage{
@@ -35,28 +41,54 @@
       animation: dropIn 1.05s cubic-bezier(.18,.95,.24,1) both;
     }
 
-    /* 3D Text (NO neon outline) */
+    .float{
+      transform-style: preserve-3d;
+      animation: floaty 4.6s ease-in-out infinite;
+    }
+
+    /* ========= 3D LIGHT TEXT ========= */
     .t3d{
       margin: 0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       font-weight: 950;
       text-transform: uppercase;
-      letter-spacing: 0.03em;
-      line-height: 0.92;
 
-      font-size: clamp(36px, 6.7vw, 92px);
+      /* ✅ Fit + readable on mobile */
+      font-size: clamp(24px, 7.2vw, 92px);
+      letter-spacing: clamp(0.01em, 0.22vw, 0.03em);
+      line-height: 0.95;
 
-      /* fallback color (always visible) */
-      color: #f7fbff;
+      max-width: 96vw;
+      overflow-wrap: anywhere;
 
-      transform: rotateX(14deg) rotateY(-8deg) translateZ(35px);
+      /* ✅ LIGHT color (always visible) */
+      color: #f9fcff;
+
+      /* 3D tilt */
+      transform: rotateX(12deg) rotateY(-6deg) translateZ(26px);
       will-change: transform;
+
+      /* 3D depth (light text + darker depth behind) */
+      text-shadow:
+        0 1px 0 rgba(0,0,0,.22),
+        0 2px 0 rgba(0,0,0,.22),
+        0 3px 0 rgba(0,0,0,.22),
+        0 4px 0 rgba(0,0,0,.22),
+        0 5px 0 rgba(0,0,0,.22),
+        0 6px 0 rgba(0,0,0,.22),
+        0 12px 26px rgba(0,0,0,.55);
     }
 
-    /* Gradient fill only if supported (still no outline) */
+    /* Optional gentle shimmer for light look */
     @supports (-webkit-background-clip: text) {
       .t3d{
-        background: linear-gradient(90deg, #ffffff, #bfe9ff, #ffd0f0, #c9ffe8, #ffffff);
+        background: linear-gradient(90deg,
+          #ffffff,
+          #eaf6ff,
+          #fff0fa,
+          #ecfff6,
+          #ffffff
+        );
         background-size: 240% 100%;
         -webkit-background-clip: text;
         background-clip: text;
@@ -65,57 +97,48 @@
       }
     }
 
-    /* 3D depth via stacked shadows (NOT outline, NOT neon) */
-    .t3d{
-      text-shadow:
-        0 1px 0 rgba(0,0,0,.28),
-        0 2px 0 rgba(0,0,0,.28),
-        0 3px 0 rgba(0,0,0,.28),
-        0 4px 0 rgba(0,0,0,.28),
-        0 5px 0 rgba(0,0,0,.28),
-        0 6px 0 rgba(0,0,0,.28),
-        0 10px 22px rgba(0,0,0,.55);
-    }
-
     .year{
       display: block;
-      margin-top: 10px;
-      font-size: clamp(56px, 9.2vw, 140px);
-      letter-spacing: 0.10em;
-      transform: translateZ(55px);
+      margin-top: clamp(4px, 1.6vw, 10px);
+
+      /* ✅ Big but fits mobile */
+      font-size: clamp(44px, 15vw, 140px);
+      letter-spacing: clamp(0.05em, 1.0vw, 0.10em);
+
+      transform: translateZ(40px);
       animation: yearPop 1.25s cubic-bezier(.16,.95,.22,1) both;
       animation-delay: .12s;
     }
 
-    /* Sub line + small accent line */
     .line{
-      width: min(560px, 86vw);
+      width: min(560px, 90vw);
       height: 2px;
-      margin: 14px auto 0;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,.85), transparent);
-      opacity: .55;
-      transform: translateZ(12px);
+      margin: clamp(10px, 2.6vw, 14px) auto 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.90), transparent);
+      opacity: .60;
+      transform: translateZ(10px);
       animation: wipe 2.4s ease-in-out infinite;
     }
 
     .sub{
-      margin-top: 12px;
+      margin-top: clamp(8px, 2.2vw, 12px);
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      font-size: clamp(12px, 2vw, 16px);
-      letter-spacing: .28em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.78);
-      transform: translateZ(12px);
-    }
 
-    /* Gentle motion */
-    .float{
-      animation: floaty 4.6s ease-in-out infinite;
-      transform-style: preserve-3d;
+      /* ✅ Fit on mobile */
+      font-size: clamp(11px, 3.1vw, 16px);
+      letter-spacing: clamp(0.10em, 1.1vw, 0.24em);
+
+      text-transform: uppercase;
+      color: rgba(255,255,255,.80);
+      max-width: 92vw;
+      margin-left: auto;
+      margin-right: auto;
+      transform: translateZ(10px);
     }
 
     .credit{
-      position: fixed; left: 0; right: 0; bottom: 10px;
+      position: fixed; left: 0; right: 0;
+      bottom: calc(10px + env(safe-area-inset-bottom));
       text-align: center;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
       font-size: 12px; letter-spacing: .3px;
@@ -124,28 +147,36 @@
       pointer-events: none; user-select: none;
       z-index: 20;
       text-shadow: 0 2px 12px rgba(0,0,0,.65);
+      padding: 0 10px;
     }
 
     @keyframes dropIn{
-      0%   { opacity: 0; transform: translateY(-80px) rotateX(30deg) scale(.94); }
-      60%  { opacity: 1; transform: translateY(10px)  rotateX(16deg) scale(1.03); }
-      100% { opacity: 1; transform: translateY(0)     rotateX(14deg) scale(1); }
+      0%   { opacity: 0; transform: translateY(-70px) rotateX(28deg) scale(.94); }
+      60%  { opacity: 1; transform: translateY(8px)   rotateX(14deg) scale(1.03); }
+      100% { opacity: 1; transform: translateY(0)     rotateX(12deg) scale(1); }
     }
     @keyframes yearPop{
-      0%   { opacity: 0; transform: translateZ(55px) translateY(18px) scale(.92); }
-      100% { opacity: 1; transform: translateZ(55px) translateY(0)    scale(1); }
+      0%   { opacity: 0; transform: translateZ(40px) translateY(14px) scale(.92); }
+      100% { opacity: 1; transform: translateZ(40px) translateY(0)    scale(1); }
     }
     @keyframes floaty{
-      0%,100% { transform: rotateX(14deg) rotateY(-8deg) translateZ(35px) translateY(0); }
-      50%     { transform: rotateX(14deg) rotateY(-8deg) translateZ(35px) translateY(-10px); }
+      0%,100% { transform: rotateX(12deg) rotateY(-6deg) translateZ(26px) translateY(0); }
+      50%     { transform: rotateX(12deg) rotateY(-6deg) translateZ(26px) translateY(-10px); }
     }
     @keyframes shine{
       0%   { background-position: 0% 50%; }
       100% { background-position: 240% 50%; }
     }
     @keyframes wipe{
-      0%,100% { transform: translateZ(12px) scaleX(.75); opacity: .45; }
-      50%     { transform: translateZ(12px) scaleX(1);   opacity: .70; }
+      0%,100% { transform: translateZ(10px) scaleX(.75); opacity: .48; }
+      50%     { transform: translateZ(10px) scaleX(1);   opacity: .72; }
+    }
+
+    /* ✅ extra small phones (320px width etc.) */
+    @media (max-width: 360px) {
+      .t3d{ font-size: clamp(22px, 8vw, 58px); }
+      .year{ font-size: clamp(40px, 18vw, 110px); }
+      .sub{ letter-spacing: clamp(0.08em, 1vw, 0.18em); }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -158,21 +189,22 @@
   <div class="fireworks"></div>
 
   <div class="center">
-    <div class="stage">
-      <div class="float">
-        <h1 class="t3d">
-          Happy New Year
-          <span class="year">2026</span>
-        </h1>
-        <div class="line"></div>
-        <div class="sub">Wishing you joy • success • love</div>
+    <div class="content">
+      <div class="stage">
+        <div class="float">
+          <h1 class="t3d">
+            Happy New Year
+            <span class="year">2026</span>
+          </h1>
+          <div class="line"></div>
+          <div class="sub">Wishing you joy • success • love</div>
+        </div>
       </div>
     </div>
   </div>
 
   <div class="credit">Created by Kanchana Ishodhara</div>
 
-  <!-- Fireworks library -->
   <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.x/dist/index.umd.js"></script>
   <script>
     (function () {
