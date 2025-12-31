@@ -7,116 +7,101 @@
 
   <style>
     :root { color-scheme: dark; }
-    html, body { height:100%; margin:0; overflow:hidden; background:#03040a; }
+    html, body { height: 100%; margin: 0; overflow: hidden; background:#050615; }
 
     /* Fireworks layer */
-    .fireworks {
+    .fireworks{
       position: fixed; inset: 0;
       background:
-        radial-gradient(circle at 50% 35%, rgba(120,160,255,.20), transparent 55%),
-        radial-gradient(circle at 18% 82%, rgba(255,120,210,.16), transparent 55%),
-        radial-gradient(circle at 82% 86%, rgba(120,255,210,.14), transparent 55%),
+        radial-gradient(circle at 50% 40%, rgba(120,160,255,.20), transparent 55%),
+        radial-gradient(circle at 20% 80%, rgba(255,120,200,.16), transparent 55%),
+        radial-gradient(circle at 80% 85%, rgba(120,255,210,.14), transparent 55%),
         #03040a;
       z-index: 1;
     }
 
-    /* Center text layer */
+    /* Center overlay */
     .center {
       position: fixed; inset: 0;
       display: grid; place-items: center;
       text-align: center;
       pointer-events: none;
-      z-index: 5;
-      padding: 28px;
+      z-index: 10;
+      padding: 24px;
     }
 
-    .wrap {
-      transform-style: preserve-3d;
+    .drop {
       perspective: 900px;
-      animation: dropIn 1.35s cubic-bezier(.15,.9,.22,1) both;
+      transform-style: preserve-3d;
+      animation: dropIn 1.15s cubic-bezier(.15,.9,.22,1) both;
     }
 
-    /* 3D Neon headline */
+    /* 3D Neon Text (safe: no background-clip, so it won't become invisible) */
     .neon {
-      margin: 0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", sans-serif;
-      font-weight: 900;
-      letter-spacing: 0.02em;
-      line-height: 0.92;
-      text-transform: uppercase;
-
-      font-size: clamp(38px, 7.2vw, 96px);
-      color: transparent;
-
-      background: linear-gradient(90deg,
-        #ffffff,
-        #9fe7ff,
-        #ff7ad9,
-        #b7ffdf,
-        #ffffff
-      );
-      background-size: 240% 100%;
-      -webkit-background-clip: text;
-      background-clip: text;
-
-      transform: translateZ(40px) rotateX(10deg);
-      animation: shimmer 2.8s linear infinite, floaty 4.6s ease-in-out infinite, neonPulse 2.4s ease-in-out infinite;
-      filter:
-        drop-shadow(0 16px 35px rgba(0,0,0,.65))
-        drop-shadow(0 0 18px rgba(90,200,255,.25))
-        drop-shadow(0 0 22px rgba(255,120,220,.22));
       position: relative;
-    }
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 0.92;
 
-    /* Fake 3D extrusion using stacked shadows */
-    .neon::after{
-      content: attr(data-text);
-      position: absolute; inset: 0;
-      z-index: -1;
-      transform: translateZ(-28px) rotateX(10deg);
-      color: rgba(0,0,0,0); /* keep fill invisible */
+      font-size: clamp(38px, 7vw, 92px);
+      letter-spacing: 0.02em;
+
+      color: #f6ffff;
+
+      /* neon glow */
       text-shadow:
-        0 1px 0 rgba(0,0,0,.30),
-        0 2px 0 rgba(0,0,0,.28),
-        0 3px 0 rgba(0,0,0,.26),
-        0 4px 0 rgba(0,0,0,.24),
-        0 5px 0 rgba(0,0,0,.22),
-        0 8px 18px rgba(0,0,0,.55);
-      opacity: .95;
+        0 0 8px rgba(120,240,255,.75),
+        0 0 18px rgba(120,240,255,.42),
+        0 0 28px rgba(255,120,220,.35),
+        0 18px 60px rgba(0,0,0,.70);
+
+      transform: translateZ(45px) rotateX(12deg);
+      animation: floaty 4.2s ease-in-out infinite, pulse 2.6s ease-in-out infinite;
+      user-select: none;
     }
 
-    /* Extra neon rim / flicker */
-    .rim {
-      display: inline-block;
-      padding: 10px 18px;
-      border-radius: 18px;
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.10);
-      box-shadow:
-        0 0 0 1px rgba(255,255,255,.06) inset,
-        0 0 30px rgba(120,200,255,.10),
-        0 0 34px rgba(255,120,220,.08);
-      backdrop-filter: blur(10px);
-      transform: translateZ(18px);
-      animation: flicker 3.6s infinite;
+    /* 3D extrusion (shadowed depth behind the text) */
+    .neon::after {
+      content: attr(data-text);
+      position: absolute;
+      left: 10px; top: 10px;
+      color: rgba(0,0,0,.32);
+      text-shadow:
+        0 1px 0 rgba(0,0,0,.35),
+        0 2px 0 rgba(0,0,0,.32),
+        0 3px 0 rgba(0,0,0,.29),
+        0 4px 0 rgba(0,0,0,.26),
+        0 5px 0 rgba(0,0,0,.23),
+        0 14px 26px rgba(0,0,0,.65);
+      transform: translateZ(-40px) rotateX(12deg);
+      z-index: -1;
+      opacity: .95;
     }
 
     .year {
       display: block;
-      font-size: clamp(48px, 9vw, 128px);
-      letter-spacing: 0.06em;
+      font-size: clamp(54px, 9vw, 132px);
+      letter-spacing: 0.08em;
       margin-top: 8px;
-      transform: translateZ(55px) rotateX(10deg);
+
+      /* extra color pop */
+      text-shadow:
+        0 0 10px rgba(255,255,255,.35),
+        0 0 22px rgba(120,240,255,.55),
+        0 0 34px rgba(255,120,220,.40),
+        0 18px 70px rgba(0,0,0,.72);
     }
 
     .sub {
       margin-top: 12px;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      font-size: clamp(14px, 2vw, 18px);
+      font-size: clamp(13px, 2vw, 18px);
       letter-spacing: .28em;
       text-transform: uppercase;
       color: rgba(255,255,255,.78);
-      text-shadow: 0 10px 26px rgba(0,0,0,.6);
+      text-shadow: 0 10px 26px rgba(0,0,0,.65);
       transform: translateZ(18px);
     }
 
@@ -129,103 +114,72 @@
       opacity: .78;
       text-shadow: 0 2px 12px rgba(0,0,0,.65);
       pointer-events: none; user-select: none;
-      z-index: 6;
+      z-index: 20;
     }
 
     @keyframes dropIn {
-      0%   { transform: translateY(-80px) rotateX(35deg) scale(.92); opacity: 0; }
-      60%  { transform: translateY(10px)  rotateX(10deg) scale(1.02); opacity: 1; }
-      100% { transform: translateY(0)     rotateX(10deg) scale(1); }
-    }
-    @keyframes shimmer {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 240% 50%; }
+      0%   { opacity: 0; transform: translateY(-90px) rotateX(35deg) scale(.92); }
+      60%  { opacity: 1; transform: translateY(10px)  rotateX(12deg) scale(1.03); }
+      100% { opacity: 1; transform: translateY(0)     rotateX(12deg) scale(1); }
     }
     @keyframes floaty {
-      0%,100% { transform: translateZ(40px) rotateX(10deg) translateY(0); }
-      50%     { transform: translateZ(40px) rotateX(10deg) translateY(-10px); }
+      0%,100% { transform: translateZ(45px) rotateX(12deg) translateY(0); }
+      50%     { transform: translateZ(45px) rotateX(12deg) translateY(-10px); }
     }
-    @keyframes neonPulse {
+    @keyframes pulse {
       0%,100% {
-        filter:
-          drop-shadow(0 16px 35px rgba(0,0,0,.65))
-          drop-shadow(0 0 18px rgba(90,200,255,.22))
-          drop-shadow(0 0 22px rgba(255,120,220,.18));
+        filter: drop-shadow(0 0 0 rgba(0,0,0,0));
       }
       50% {
-        filter:
-          drop-shadow(0 18px 40px rgba(0,0,0,.68))
-          drop-shadow(0 0 24px rgba(90,200,255,.32))
-          drop-shadow(0 0 30px rgba(255,120,220,.28));
+        filter: drop-shadow(0 0 10px rgba(120,240,255,.18));
       }
     }
-    @keyframes flicker {
-      0%, 100% { opacity: 1; }
-      92% { opacity: 0.96; }
-      94% { opacity: 0.88; }
-      96% { opacity: 1; }
-      98% { opacity: 0.92; }
-    }
 
-    /* Reduced motion */
     @media (prefers-reduced-motion: reduce) {
-      .wrap { animation: none; }
-      .neon { animation: none; }
-      .rim  { animation: none; }
+      .drop, .neon { animation: none; }
     }
   </style>
 </head>
+
 <body>
   <div class="fireworks"></div>
 
   <div class="center">
-    <div class="wrap">
-      <div class="rim">
-        <h1 class="neon" data-text="Happy New Year 2026">
-          Happy New Year
-          <span class="year">2026</span>
-        </h1>
-        <div class="sub">Wishing you joy • success • love</div>
-      </div>
+    <div class="drop">
+      <h1 class="neon" data-text="Happy New Year 2026">
+        Happy New Year
+        <span class="year">2026</span>
+      </h1>
+      <div class="sub">Wishing you joy • success • love</div>
     </div>
   </div>
 
   <div class="credit">Created by Kanchana Ishodhara</div>
 
-  <!-- Fireworks library (CDN) -->
+  <!-- Fireworks library -->
   <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.x/dist/index.umd.js"></script>
 
   <script>
     (function () {
-      var container = document.querySelector(".fireworks");
+      var container = document.querySelector('.fireworks');
 
-      function startFireworks() {
-        if (!window.Fireworks || !window.Fireworks.default) return;
+      // IMPORTANT: keep this exact pattern (it worked before)
+      var options = {
+        autoresize: true,
+        opacity: 0.55,
+        acceleration: 1.05,
+        friction: 0.98,
+        gravity: 1.5,
+        particles: 90,
+        trace: 3,
+        explosion: 6,
+        hue: { min: 0, max: 360 },
+        delay: { min: 15, max: 32 },
+        mouse: { click: true, move: false, max: 3 }
+      };
 
-        var options = {
-          autoresize: true,
-          opacity: 0.55,
-          acceleration: 1.05,
-          friction: 0.98,
-          gravity: 1.5,
-          particles: 90,
-          trace: 3,
-          explosion: 6,
-          hue: { min: 0, max: 360 },
-          delay: { min: 15, max: 32 },
-          mouse: { click: true, move: false, max: 3 }
-        };
-
-        var fw = new window.Fireworks.default(container, options);
-        fw.start();
-      }
-
-      // start when CDN is ready
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", startFireworks);
-      } else {
-        startFireworks();
-      }
+      var fw = new Fireworks.default(container, options);
+      fw.start();
     })();
   </script>
 </body>
